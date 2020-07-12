@@ -1,0 +1,45 @@
+.headers on
+-- Name: Steven Fairchild
+-- File: family.sql
+-- Date: July 2, 2020
+
+
+
+drop table if exists family;
+
+create table family (
+id int,
+name text,
+sex int,
+role text
+);
+
+insert into family values (1,"Steven",1,"parent");
+insert into family values (2,"Chika",0,"parent");
+insert into family values (3,"Casie",0,"child");
+insert into family values (4,"Jackson",1,"child");
+insert into family values (5,"Max",1,"pet");
+insert into family values (6,"Midnight",0,"pet");
+
+select * from family;
+id|name|sex|role
+1|Steven|1|parent
+2|Chika|0|parent
+3|Casie|0|child
+4|Jackson|1|child
+5|Max|1|pet
+6|Midnight|0|pet
+select * from family where sex = 1;
+id|name|sex|role
+1|Steven|1|parent
+4|Jackson|1|child
+5|Max|1|pet
+select * from family where role like "child";
+id|name|sex|role
+3|Casie|0|child
+4|Jackson|1|child
+select * from family where role like "pet";
+id|name|sex|role
+5|Max|1|pet
+6|Midnight|0|pet
+-- select * from family where id = (id % 2 = 0);

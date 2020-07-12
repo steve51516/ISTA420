@@ -1,0 +1,76 @@
+-- Name: Steven Fairchild
+-- File: t-sql_quiz02.sql
+-- Date: July 9, 2020
+
+-- 1. How many seafood products do we have?
+select count(productid) from products where categoryid = 8;
+count(productid)
+12
+
+-- 2. What are the names and IDs of our seafood products?
+select productname,productid from products where categoryid = 8;
+ProductName|ProductID
+Ikura|10
+Konbu|13
+Carnarvon Tigers|18
+Nord-Ost Matjeshering|30
+Inlagd Sill|36
+Gravad lax|37
+Boston Crab Meat|40
+Jack's New England Clam Chowder|41
+Rogede sild|45
+Spegesild|46
+Escargots de Bourgogne|58
+Röd Kaviar|73
+
+-- 3. What is the average price of our seafood products?
+select avg(unitprice) from products where categoryid = 8;
+avg(unitprice)
+20.6825
+
+-- 4. What is our highest priced seafood product, and how much does it cost?
+select productid,productname, max(unitprice) from products where categoryid = 8;
+ProductID|ProductName|max(unitprice)
+18|Carnarvon Tigers|62.5
+
+-- 5. What is our lowest priced seafood product, and how much does it cost?
+select productid,productname, min(unitprice) from products where categoryid = 8;
+ProductID|ProductName|min(unitprice)
+13|Konbu|6.0
+
+-- 6. How many customers do we have in Denmark?
+select count(customerid) from customers where country like "Denmark";
+count(customerid)
+2
+
+-- 7. What are the customer names and IDs of our Danish customers?
+select customerid,contactname from customers where country like "Denmark";
+CustomerID|ContactName
+SIMOB|Jytte Petersen
+VAFFE|Palle Ibsen
+
+-- 8. Which customers do NOT have a fax number? This one is very tricky!
+select contactname from customers where fax like '';
+ContactName
+Antonio Moreno
+Victoria Ashworth
+Yang Wang
+Pedro Afonso
+Aria Cruz
+Maria Larsson
+José Pedro Freyre
+André Fonseca
+Howard Snyder
+Helen Bennett
+Philip Cramer
+Jaime Yorres
+Alexander Feuer
+Isabel de Castro
+Lúcia Carvalho
+Horst Kloss
+Janete Limeira
+Michael Holz
+Jose Pavarotti
+Liz Nixon
+Miguel Angel Paolino
+Paula Parente

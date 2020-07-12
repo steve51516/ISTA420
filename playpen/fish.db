@@ -1,0 +1,12 @@
+.headers on
+
+-- Name:fish.sql
+-- Author: Steven Fairchild
+-- Date: July 2, 2020
+
+drop table if exists fish;
+
+
+
+.schema fish
+
