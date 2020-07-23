@@ -1,6 +1,6 @@
 # ISTA420
 ## Steven Fairchild
 
-steven.fairchild@outlook.com
+steve51516@gmail.com
 
 This repository contains my database code.
