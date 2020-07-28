@@ -1,0 +1,216 @@
+.headers on
+
+-- Name: Steven Fairchild
+-- File: EX03-steven.sql
+-- Date: July 17, 2020
+
+-- 1. Using SQLite and the Northwind database, create a line item report that contains a line for each product in the order with the following columns: the order id, the product id, the unit price, the quantity sold, the line item price, and the percent of that line item constitutes of the total amount of the order.
+
+select orderid, productid, unitprice, (unitprice * quantity) as line_total, ((unitprice*quantity)/(sum(unitprice*quantity)))*100 as PctOfTotalOrder from order_details group by orderid limit 25;
+OrderID|ProductID|UnitPrice|line_total|PctOfTotalOrder
+10248|11|14.0|168.0|38.1818181818182
+10249|14|18.6|167.4|8.98357840506601
+10250|41|7.7|77.0|4.24710424710425
+10251|22|16.8|100.8|15.0268336314848
+10252|20|64.8|2592.0|69.4906166219839
+10253|31|10.0|200.0|13.8427464008859
+10254|24|3.6|54.0|8.63723608445297
+10255|2|15.2|304.0|12.2063842601887
+10256|53|26.2|393.0|75.8980301274623
+10257|27|35.1|877.5|78.3552102866327
+10258|2|15.2|760.0|37.6498563360745
+10259|21|8.0|80.0|79.3650793650794
+10260|41|7.7|123.2|7.05532012369717
+10261|21|8.0|160.0|35.7142857142857
+10262|5|17.0|204.0|32.6504481434059
+10263|16|13.9|834.0|33.8364167478092
+10264|2|15.2|532.0|73.4299516908213
+10265|17|31.2|936.0|79.5918367346939
+10266|12|30.4|364.8|100.0
+10267|40|14.7|735.0|18.2336889109402
+10268|29|99.0|990.0|89.901925172539
+10269|33|2.0|120.0|17.7514792899408
+10270|36|15.2|456.0|33.1395348837209
+10271|33|2.0|48.0|100.0
+10272|20|64.8|388.8|26.7032967032967
+
+-- 2. I want to know the unique (distinct) cities, regions, and postal codes: (a) where we have both customers and employees, (b) where we have customers but no employees AND both customers ad employees, and (c) where we have employees but no customers AND both customers and employees. Write three queries, using inner and outer joins. Report the results of the queries. There is no need for any further reporting.
+
+-- (a) where we have both customers and employees
+select c.postalcode, e.postalcode, e.city, e.region, e.country, c.companyname, c.city, c.region, c.country from customers c inner join employees e on e.city = c.city;
+PostalCode|PostalCode|City|Region|Country|CompanyName|City|Region|Country
+WA1 1DP|EC2 7JR|London|NULL|UK|Around the Horn|London||UK
+WA1 1DP|RG1 9SP|London|NULL|UK|Around the Horn|London||UK
+WA1 1DP|SW1 8JR|London|NULL|UK|Around the Horn|London||UK
+WA1 1DP|WG2 7LT|London|NULL|UK|Around the Horn|London||UK
+EC2 5NT|EC2 7JR|London|NULL|UK|B''s Beverages|London||UK
+EC2 5NT|RG1 9SP|London|NULL|UK|B''s Beverages|London||UK
+EC2 5NT|SW1 8JR|London|NULL|UK|B''s Beverages|London||UK
+EC2 5NT|WG2 7LT|London|NULL|UK|B''s Beverages|London||UK
+WX1 6LT|EC2 7JR|London|NULL|UK|Consolidated Holdings|London||UK
+WX1 6LT|RG1 9SP|London|NULL|UK|Consolidated Holdings|London||UK
+WX1 6LT|SW1 8JR|London|NULL|UK|Consolidated Holdings|London||UK
+WX1 6LT|WG2 7LT|London|NULL|UK|Consolidated Holdings|London||UK
+WX3 6FW|EC2 7JR|London|NULL|UK|Eastern Connection|London||UK
+WX3 6FW|RG1 9SP|London|NULL|UK|Eastern Connection|London||UK
+WX3 6FW|SW1 8JR|London|NULL|UK|Eastern Connection|London||UK
+WX3 6FW|WG2 7LT|London|NULL|UK|Eastern Connection|London||UK
+SW7 1RZ|EC2 7JR|London|NULL|UK|North/South|London||UK
+SW7 1RZ|RG1 9SP|London|NULL|UK|North/South|London||UK
+SW7 1RZ|SW1 8JR|London|NULL|UK|North/South|London||UK
+SW7 1RZ|WG2 7LT|London|NULL|UK|North/South|London||UK
+OX15 4NB|EC2 7JR|London|NULL|UK|Seven Seas Imports|London||UK
+OX15 4NB|RG1 9SP|London|NULL|UK|Seven Seas Imports|London||UK
+OX15 4NB|SW1 8JR|London|NULL|UK|Seven Seas Imports|London||UK
+OX15 4NB|WG2 7LT|London|NULL|UK|Seven Seas Imports|London||UK
+98034|98033|Kirkland|WA|USA|Trail''s Head Gourmet Provisioners|Kirkland|WA|USA
+98128|98105|Seattle|WA|USA|White Clover Markets|Seattle|WA|USA
+98128|98122|Seattle|WA|USA|White Clover Markets|Seattle|WA|USA
+
+-- (b) where we have customers but no employees AND both customers and employees
+select c.postalcode, e.postalcode, e.city, e.region, e.country, c.companyname, c.city, c.region, c.country from customers c left join employees e on e.city = c.city;
+PostalCode|PostalCode|City|Region|Country|CompanyName|City|Region|Country
+PostalCode|||||CompanyName|City|Region|Country
+12209|||||Alfreds Futterkiste|Berlin||Germany
+05021|||||Ana Trujillo Emparedados y helados|México D.F.||Mexico
+05023|||||Antonio Moreno Taquería|México D.F.||Mexico
+WA1 1DP|EC2 7JR|London|NULL|UK|Around the Horn|London||UK
+WA1 1DP|RG1 9SP|London|NULL|UK|Around the Horn|London||UK
+WA1 1DP|SW1 8JR|London|NULL|UK|Around the Horn|London||UK
+WA1 1DP|WG2 7LT|London|NULL|UK|Around the Horn|London||UK
+S-958 22|||||Berglunds snabbköp|Luleå||Sweden
+68306|||||Blauer See Delikatessen|Mannheim||Germany
+67000|||||Blondesddsl père et fils|Strasbourg||France
+28023|||||Bólido Comidas preparadas|Madrid||Spain
+13008|||||Bon app''|Marseille||France
+T2F 8M4|||||Bottom-Dollar Markets|Tsawassen|BC|Canada
+EC2 5NT|EC2 7JR|London|NULL|UK|B''s Beverages|London||UK
+EC2 5NT|RG1 9SP|London|NULL|UK|B''s Beverages|London||UK
+EC2 5NT|SW1 8JR|London|NULL|UK|B''s Beverages|London||UK
+EC2 5NT|WG2 7LT|London|NULL|UK|B''s Beverages|London||UK
+1010|||||Cactus Comidas para llevar|Buenos Aires||Argentina
+05022|||||Centro comercial Moctezuma|México D.F.||Mexico
+3012|||||Chop-suey Chinese|Bern||Switzerland
+05432-043|||||Comércio Mineiro|Sao Paulo|SP|Brazil
+WX1 6LT|EC2 7JR|London|NULL|UK|Consolidated Holdings|London||UK
+WX1 6LT|RG1 9SP|London|NULL|UK|Consolidated Holdings|London||UK
+WX1 6LT|SW1 8JR|London|NULL|UK|Consolidated Holdings|London||UK
+WX1 6LT|WG2 7LT|London|NULL|UK|Consolidated Holdings|London||UK
+52066|||||Drachenblut Delikatessen|Aachen||Germany
+44000|||||Du monde entier|Nantes||France
+WX3 6FW|EC2 7JR|London|NULL|UK|Eastern Connection|London||UK
+WX3 6FW|RG1 9SP|London|NULL|UK|Eastern Connection|London||UK
+WX3 6FW|SW1 8JR|London|NULL|UK|Eastern Connection|London||UK
+WX3 6FW|WG2 7LT|London|NULL|UK|Eastern Connection|London||UK
+8010|||||Ernst Handel|Graz||Austria
+05442-030|||||Familia Arquibaldo|Sao Paulo|SP|Brazil
+28034|||||FISSA Fabrica Inter. Salchichas S.A.|Madrid||Spain
+59000|||||Folies gourmandes|Lille||France
+S-844 67|||||Folk och fä HB|Bräcke||Sweden
+80805|||||Frankenversand|München||Germany
+44000|||||France restauration|Nantes||France
+10100|||||Franchi S.p.A.|Torino||Italy
+1675|||||Furia Bacalhau e Frutos do Mar|Lisboa||Portugal
+08022|||||Galería del gastrónomo|Barcelona||Spain
+41101|||||Godos Cocina Típica|Sevilla||Spain
+04876-786|||||Gourmet Lanchonetes|Campinas|SP|Brazil
+97403|||||Great Lakes Food Market|Eugene|OR|USA
+1081|||||GROSELLA-Restaurante|Caracas|DF|Venezuela
+05454-876|||||Hanari Carnes|Rio de Janeiro|RJ|Brazil
+5022|||||HILARION-Abastos|San Cristóbal|Táchira|Venezuela
+97827|||||Hungry Coyote Import Store|Elgin|OR|USA
+|||||Hungry Owl All-Night Grocers|Cork|Co. Cork|Ireland
+PO31 7PJ|||||Island Trading|Cowes|Isle of Wight|UK
+14776|||||Königlich Essen|Brandenburg||Germany
+78000|||||La corne d''abondance|Versailles||France
+31000|||||La maison d''Asie|Toulouse||France
+V3F 2K1|||||Laughing Bacchus Wine Cellars|Vancouver|BC|Canada
+99362|||||Lazy K Kountry Store|Walla Walla|WA|USA
+60528|||||Lehmanns Marktstand|Frankfurt a.M.||Germany
+94117|||||Let''s Stop N Shop|San Francisco|CA|USA
+3508|||||LILA-Supermercado|Barquisimeto|Lara|Venezuela
+4980|||||LINO-Delicateses|I. de Margarita|Nueva Esparta|Venezuela
+97219|||||Lonesome Pine Restaurant|Portland|OR|USA
+24100|||||Magazzini Alimentari Riuniti|Bergamo||Italy
+B-1180|||||Maison Dewey|Bruxelles||Belgium
+H1J 1C3|||||Mère Paillarde|Montréal|Québec|Canada
+04179|||||Morgenstern Gesundkost|Leipzig||Germany
+SW7 1RZ|EC2 7JR|London|NULL|UK|North/South|London||UK
+SW7 1RZ|RG1 9SP|London|NULL|UK|North/South|London||UK
+SW7 1RZ|SW1 8JR|London|NULL|UK|North/South|London||UK
+SW7 1RZ|WG2 7LT|London|NULL|UK|North/South|London||UK
+1010|||||Océano Atlántico Ltda.|Buenos Aires||Argentina
+99508|||||Old World Delicatessen|Anchorage|AK|USA
+50739|||||Ottilies Käseladen|Köln||Germany
+75012|||||Paris spécialités|Paris||France
+05033|||||Pericles Comidas clásicas|México D.F.||Mexico
+5020|||||Piccolo und mehr|Salzburg||Austria
+1756|||||Princesa Isabel Vinhos|Lisboa||Portugal
+02389-673|||||Que Delícia|Rio de Janeiro|RJ|Brazil
+05487-020|||||Queen Cozinha|Sao Paulo|SP|Brazil
+01307|||||QUICK-Stop|Cunewalde||Germany
+1010|||||Rancho grande|Buenos Aires||Argentina
+87110|||||Rattlesnake Canyon Grocery|Albuquerque|NM|USA
+42100|||||Reggiani Caseifici|Reggio Emilia||Italy
+02389-890|||||Ricardo Adocicados|Rio de Janeiro|RJ|Brazil
+1203|||||Richter Supermarkt|Genève||Switzerland
+28001|||||Romero y tomillo|Madrid||Spain
+4110|||||Santé Gourmet|Stavern||Norway
+83720|||||Save-a-lot Markets|Boise|ID|USA
+OX15 4NB|EC2 7JR|London|NULL|UK|Seven Seas Imports|London||UK
+OX15 4NB|RG1 9SP|London|NULL|UK|Seven Seas Imports|London||UK
+OX15 4NB|SW1 8JR|London|NULL|UK|Seven Seas Imports|London||UK
+OX15 4NB|WG2 7LT|London|NULL|UK|Seven Seas Imports|London||UK
+1734|||||Simons bistro|Kobenhavn||Denmark
+75016|||||Spécialités du monde|Paris||France
+82520|||||Split Rail Beer & Ale|Lander|WY|USA
+B-6000|||||Suprêmes délices|Charleroi||Belgium
+97201|||||The Big Cheese|Portland|OR|USA
+59801|||||The Cracker Box|Butte|MT|USA
+44087|||||Toms Spezialitäten|Münster||Germany
+05033|||||Tortuga Restaurante|México D.F.||Mexico
+05634-030|||||Tradição Hipermercados|Sao Paulo|SP|Brazil
+98034|98033|Kirkland|WA|USA|Trail''s Head Gourmet Provisioners|Kirkland|WA|USA
+8200|||||Vaffeljernet|Århus||Denmark
+69004|||||Victuailles en stock|Lyon||France
+51100|||||Vins et alcools Chevalier|Reims||France
+70563|||||Die Wandernde Kuh|Stuttgart||Germany
+90110|||||Wartian Herkku|Oulu||Finland
+08737-363|||||Wellington Importadora|Resende|SP|Brazil
+98128|98105|Seattle|WA|USA|White Clover Markets|Seattle|WA|USA
+98128|98122|Seattle|WA|USA|White Clover Markets|Seattle|WA|USA
+21240|||||Wilman Kala|Helsinki||Finland
+01-012|||||Wolski  Zajazd|Warszawa||Poland
+
+-- (c) where we have employees but no customers AND both customers and employees.
+select e.city, e.region, e.country, c.companyname, c.city, c.region, c.country from employees e left join customers c on e.city = c.city;
+City|Region|Country|CompanyName|City|Region|Country
+Seattle|WA|USA|White Clover Markets|Seattle|WA|USA
+Tacoma|WA|USA||||
+Kirkland|WA|USA|Trail''s Head Gourmet Provisioners|Kirkland|WA|USA
+Redmond|WA|USA||||
+London|NULL|UK|Around the Horn|London||UK
+London|NULL|UK|B''s Beverages|London||UK
+London|NULL|UK|Consolidated Holdings|London||UK
+London|NULL|UK|Eastern Connection|London||UK
+London|NULL|UK|North/South|London||UK
+London|NULL|UK|Seven Seas Imports|London||UK
+London|NULL|UK|Around the Horn|London||UK
+London|NULL|UK|B''s Beverages|London||UK
+London|NULL|UK|Consolidated Holdings|London||UK
+London|NULL|UK|Eastern Connection|London||UK
+London|NULL|UK|North/South|London||UK
+London|NULL|UK|Seven Seas Imports|London||UK
+London|NULL|UK|Around the Horn|London||UK
+London|NULL|UK|B''s Beverages|London||UK
+London|NULL|UK|Consolidated Holdings|London||UK
+London|NULL|UK|Eastern Connection|London||UK
+London|NULL|UK|North/South|London||UK
+London|NULL|UK|Seven Seas Imports|London||UK
+Seattle|WA|USA|White Clover Markets|Seattle|WA|USA
+London|NULL|UK|Around the Horn|London||UK
+London|NULL|UK|B''s Beverages|London||UK
+London|NULL|UK|Consolidated Holdings|London||UK
+London|NULL|UK|Eastern Connection|London||UK
+London|NULL|UK|North/South|London||UK
+London|NULL|UK|Seven Seas Imports|London||UK
