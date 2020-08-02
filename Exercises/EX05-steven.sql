@@ -81,8 +81,6 @@ NULL,
 NULL,
 'Presbyterian');
 
-select p.Home_State, p.State_of_Birth, p.Party_Affliliation from USA.Presidents P where Party_Affliliation = 'Democratic'
-
 select p.First_Name, P.Last_Name, DATEDIFF(DAY, Date_Took_Office, Date_Left_Office) from USA.Presidents p
 
 select First_Name, Last_Name, DATEDIFF(YEAR, Date_of_Birth, Date_Took_Office) as Age_When_Took_Office from USA.Presidents p
