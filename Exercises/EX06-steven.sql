@@ -27,19 +27,6 @@ htmlDescription varchar(250),
 imagepath varchar(MAX)
 );
 
---CREATE TABLE CC.Products(
---productCode varchar(50) PRIMARY KEY,
---productName varchar(50),
---productLine varchar(50),
---productScale varchar(50),
---productVender varchar(50),
---productDescription varchar(MAX),
---quantityInStock varchar(50),
---buyPrice varchar(50),
---MSRP varchar(MAX)
---);
-
-
 CREATE TABLE CC.Products
 (
 productCode varchar(500) not null
@@ -120,15 +107,12 @@ amount varchar(50),
 CONSTRAINT PK_Reservation_2 PRIMARY KEY (customerNumber, checkNumber)
 );
 
-select * from CC.Customers;
-
 BULK INSERT CC.Customers 
 FROM 'E:\steve\Documents\Quantico06\ISTA420\Data\Customers.csv'
 WITH (
 FORMAT = 'CSV',
 KEEPNULLS,
 DATAFILETYPE = 'char',
---FIELDTERMINATOR = ',',
 ROWTERMINATOR = '\n'
 )
 
@@ -137,7 +121,6 @@ WITH
 (
 FORMAT = 'CSV',
 DATAFILETYPE = 'char',
---FIELDTERMINATOR = ',',
 ROWTERMINATOR = '\n'
 );
 
@@ -146,7 +129,6 @@ WITH
 (
 FORMAT = 'CSV',
 DATAFILETYPE = 'char',
---FIELDTERMINATOR = ',',
 ROWTERMINATOR = '\n'
 );
 
@@ -155,7 +137,6 @@ WITH
 (
 FORMAT = 'CSV',
 DATAFILETYPE = 'char',
---FIELDTERMINATOR = ',',
 ROWTERMINATOR = '\n'
 );
 
@@ -165,7 +146,6 @@ WITH
 FORMAT='CSV',
 KEEPNULLS,
 DATAFILETYPE = 'char',
---FIELDTERMINATOR = ',',
 ROWTERMINATOR = '\n'
 );
 
@@ -174,7 +154,6 @@ WITH
 (
 FORMAT = 'CSV',
 DATAFILETYPE = 'char',
---FIELDTERMINATOR = ',',
 ROWTERMINATOR = '\n'
 );
 
@@ -183,7 +162,6 @@ WITH
 (
 FORMAT = 'CSV',
 DATAFILETYPE = 'char',
---FIELDTERMINATOR = ',',
 ROWTERMINATOR = '\n'
 );
 
@@ -192,7 +170,6 @@ WITH
 (
 FORMAT = 'CSV',
 DATAFILETYPE = 'char',
---FIELDTERMINATOR = ',',
 ROWTERMINATOR = '\n'
 );
 GO
@@ -201,7 +178,7 @@ GO
 --(a) How many distinct products does ClassicModels sell?
 
 Select DISTINCT count(p.productLine) from CC.Products p
-where p.productLine = '"Classic Cars"';
+where p.productLine = 'Classic Cars';
 
 -- (b) Report the name and city of customers who don't have sales representatives?
 
@@ -234,7 +211,7 @@ Select customerName, salesRepEmployeeNumber from CC.Customers c
 -- (f) Report total payments for Atelier graphique.
 
 Select SUM((convert(money,amount))) from CC.Payments
-JOIN CC.Customers on Customers.customer Number=Payments.customerNumber 
+JOIN CC.Customers on CC.Customers.customerNumer = CC.Payments.customerNumber
 where customerName LIKE '%Atelier graphique%';
 
 
@@ -247,8 +224,6 @@ convert(datetime, paymentDate) as dateConverted from CC.Payments order by paymen
 --------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------
 -- (h) Report the products that have not been sold.
-select * from CC.OrderDetails order by quantityOrdered ASC;
-select * from CC.Products; 
 
 select * from CC.OrderDetails
 JOIN CC.Products on Products.productCode=OrderDetails.productCode order by quantityOrdered ASC;
